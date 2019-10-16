@@ -21,7 +21,11 @@ from nltk.stem.wordnet import WordNetLemmatizer
 #from pdfminer.pdfpage import PDFPage
 import io
 
+#Import pyPDF2
+import PyPDF2 
+
 resumes_path = "C:\\Users\\144725\\PythonProjects\\TAGBot\\Sample Resumes"
+PdfPath = "C:\\Users\\144725\\PythonProjects\\TAGBot\\Sample Resumes\\Resum1.pdf"
 
 
 # keep all the resumes in the path Sample Resumes
@@ -184,6 +188,26 @@ def clean_text(text):
     text = ' '.join(text)
     return text
 
+def extract_pdfText_using_pyPDF2(pdfPath):
+    page_content = ""
+    # creating a pdf file object 
+    pdfFileObj = open(pdfPath, 'rb') 
+    
+    # creating a pdf reader object 
+    pdfReader = PyPDF2.PdfFileReader(pdfFileObj) 
+    
+    # printing number of pages in pdf file 
+    print(pdfReader.numPages) 
+
+    # extracting text from page all pages of the PDF
+    for page_number in range(pdfReader.numPages):
+        page = pdfReader.getPage(page_number) # creating a page object 
+        page_content += page.extractText() # extracting text from page object
+
+    # closing the pdf file object 
+    pdfFileObj.close() 
+
+    print(page_content)
+    return page_content
 
 if __name__ == '__main__':
-    pass

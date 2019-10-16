@@ -188,7 +188,8 @@ def clean_text(text):
     text = ' '.join(text)
     return text
 
-def extract_pdfText_using_pyPDF2(pdfPath):
+def extract_pdfToText_from_file(pdfPath):
+    # author : Balamurugan R
     page_content = ""
     # creating a pdf file object 
     pdfFileObj = open(pdfPath, 'rb') 

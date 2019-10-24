@@ -7,10 +7,14 @@
     </head>
     <body>
         <h1>Skills</h1>
-        <ul>
-            {% for skill in skills %}
-            <li>{{ skill }}</li>
-            {% endfor %}
-        </ul>
+        {% if skills | length == 0 %}
+            <h2>No Skills found</h2>
+        {% else %}
+            <ul>
+                {% for skill in skills %}
+                <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </body>
 </html>

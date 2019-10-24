@@ -1,5 +1,4 @@
 # General Imports
-import os
 import pandas as pd
 
 # to extract list of programming lanugages from wiki
@@ -8,94 +7,8 @@ from bs4 import BeautifulSoup
 
 # to convert docx to text
 import docx2txt
-
-# for nlp
-import re
 from nltk.corpus import stopwords
-from nltk.stem.wordnet import WordNetLemmatizer
-
-# To extract text from pdf
-#from pdfminer.converter import TextConverter
-#from pdfminer.pdfinterp import PDFPageInterpreter
-#from pdfminer.pdfinterp import PDFResourceManager
-#from pdfminer.pdfpage import PDFPage
-import io
-
-#Import pyPDF2
 import PyPDF2 
-
-resumes_path = "C:\\Users\\144725\\PythonProjects\\TAGBot\\Sample Resumes"
-PdfPath = "C:\\Users\\144725\\PythonProjects\\TAGBot\\Sample Resumes\\Resum1.pdf"
-
-
-# keep all the resumes in the path Sample Resumes
-def create_df():
-    # resume_input_path = ".\\Sample Resumes"
-    all_files = list()
-
-    # list to keep the file names that were already convereted so that it need not be convereted again
-    # converting process takes too much time
-
-    df = pd.DataFrame(columns=['resume_text'])
-    already_converted_files = pd.DataFrame(columns=['file_name'])
-    try:
-        df = pd.read_csv('resume_in_text.csv', index_col=0)
-    except OSError:
-        print('resume_in_text.csv not found. New one will be created')
-
-    try:
-        already_converted_files = pd.read_csv('converted_files_list.csv', index_col=0)
-    except OSError:
-        print('converted_files_list.csv not found. New one will be created')
-
-    # Build a map of file name with full path
-    for root, subdir, files in os.walk(resumes_path):
-        # print(files)
-        files_in_this_dir = map(lambda x: os.path.join(root, x), files)
-        all_files.append(files_in_this_dir)
-
-    # Create a list out of the map's first element
-    # TODO: Change this hard coding. Need to write a smart function to create the list with fils with full path
-    fl = list(all_files[0])
-
-    # Create a dataframe of resumes
-
-    for file in fl:
-        if file not in already_converted_files['file_name'].values:
-            if file[-4:] == 'docx':
-                df = df.append({'resume_text': docx2txt.process(file)}, ignore_index=True)
-                # df = df.append([[docx2txt.process(file)]])
-                already_converted_files = already_converted_files.append({'file_name': file}, ignore_index=True)
-                # already_converted_files = already_converted_files.append([[file]])
-            elif file[-3:] == 'pdf':
-                df = df.append({'resume_text': extract_pdfToText_from_file(file)}, ignore_index=True)
-                # df = df.append([[extract_text_from_pdf(file)]])
-                already_converted_files = already_converted_files.append({'file_name': file}, ignore_index=True)
-                # already_converted_files = already_converted_files.append([[file]])
-
-    # TODO : Eventually store the converted text in database
-    df.to_csv('resume_in_text.csv')
-    already_converted_files.to_csv('converted_files_list.csv')
-
-    return df
-
-
-def extract_text_from_pdf(pdf_file):
-    resource_manager = PDFResourceManager()
-    fake_file = io.StringIO()
-    converter = TextConverter(resource_manager, fake_file)
-    page_interpreter = PDFPageInterpreter(resource_manager, converter)
-
-    with open(pdf_file, 'rb') as f:
-        for page in PDFPage.get_pages(f):
-            page_interpreter.process_page(page)
-        text = fake_file.getvalue()
-
-    converter.close()
-    fake_file.close()
-
-    if text:
-        return text
 
 
 def get_prgm_list_from_wiki():
@@ -161,32 +74,6 @@ def get_stop_words():
                      'project', 'functional', 'defect', 'regression', 'content', 'execution']
     stop_words = stop_words.union(custome_words)
     return stop_words
-
-
-def clean_corpus():
-    corpus = list()
-    stop_words = get_stop_words()
-    df = create_df()
-    for i in range(len(df.index)):
-        text = re.sub(r'[^a-zA-Z0-9\+*\#]', ' ', df['resume_text'][i])
-        text = text.lower()
-        text = text.split()
-        # ps = PorterStemmer()
-        # text = [ps.stem(x) for x in text if x not in stop_words]
-        lem = WordNetLemmatizer()
-        text = [lem.lemmatize(x) for x in text if x not in stop_words]
-        text = ' '.join(text)
-        corpus.append(text)
-    return corpus
-
-
-def clean_text(text):
-    stop_words = get_stop_words()
-    text = re.sub(r'[^a-zA-Z0-9\+*\#]', ' ', text).lower().split()
-    lem = WordNetLemmatizer()
-    text = [lem.lemmatize(x) for x in text if x not in stop_words]
-    text = ' '.join(text)
-    return text
 
 def extract_pdfToText_from_file(pdfPath):
     # author : Balamurugan R

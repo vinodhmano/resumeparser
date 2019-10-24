@@ -68,7 +68,7 @@ def create_df():
                 already_converted_files = already_converted_files.append({'file_name': file}, ignore_index=True)
                 # already_converted_files = already_converted_files.append([[file]])
             elif file[-3:] == 'pdf':
-                df = df.append({'resume_text': extract_text_from_pdf(file)}, ignore_index=True)
+                df = df.append({'resume_text': extract_pdfToText_from_file(file)}, ignore_index=True)
                 # df = df.append([[extract_text_from_pdf(file)]])
                 already_converted_files = already_converted_files.append({'file_name': file}, ignore_index=True)
                 # already_converted_files = already_converted_files.append([[file]])
@@ -139,9 +139,9 @@ def get_prgm_lang_list():
         return list(master_list_df['Language Name'])
     except OSError:
         master_list = list()
-        master_list.append(get_prgm_list_from_wiki())
-        master_list.append(get_adb_software_list_from_wiki())
-
+        master_list.extend(get_prgm_list_from_wiki())
+        master_list.extend(get_adb_software_list_from_wiki())
+        master_list = [skill.strip().lower() for skill in master_list]
 
         # save it to a csv file so that we can load it faster
         (pd.Series(master_list)
@@ -198,7 +198,7 @@ def extract_pdfToText_from_file(pdfPath):
     pdfReader = PyPDF2.PdfFileReader(pdfFileObj) 
     
     # printing number of pages in pdf file 
-    print(pdfReader.numPages) 
+    #print(pdfReader.numPages) 
 
     # extracting text from page all pages of the PDF
     for page_number in range(pdfReader.numPages):
@@ -208,7 +208,5 @@ def extract_pdfToText_from_file(pdfPath):
     # closing the pdf file object 
     pdfFileObj.close() 
 
-    print(page_content)
+    #print(page_content)
     return page_content
-
-if __name__ == '__main__':

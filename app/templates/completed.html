@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
         <title>
             Completed
         </title>
@@ -10,9 +11,9 @@
         {% if skills | length == 0 %}
             <h2>No Skills found</h2>
         {% else %}
-            <ul>
+            <ul class="completed skillslist">
                 {% for skill in skills %}
-                <li>{{ skill }}</li>
+                <li class="skill">{{ skill }}</li>
                 {% endfor %}
             </ul>
         {% endif %}

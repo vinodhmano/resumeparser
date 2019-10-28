@@ -1,5 +1,7 @@
 # General Imports
 import pandas as pd
+from nltk.corpus import stopwords
+
 
 # to extract list of programming lanugages from wiki
 import urllib.request
@@ -7,7 +9,14 @@ from bs4 import BeautifulSoup
 
 # to convert docx to text
 import docx2txt
-from nltk.corpus import stopwords
+
+#to convert .doc to txt
+import os
+import win32com.client
+import threading
+import pythoncom
+
+#to convert .pdf to text
 import PyPDF2 
 
 
@@ -97,3 +106,13 @@ def extract_pdfToText_from_file(pdfPath):
 
     #print(page_content)
     return page_content
+
+
+def extract_txt_from_doc(filepath):
+    if threading.currentThread().getName() != 'MainThread':
+        pythoncom.CoInitialize()
+        doc = win32com.client.GetObject(filepath)
+        text = doc.Range().Text
+        pythoncom.CoUninitialize()
+
+    return text

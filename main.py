@@ -1,4 +1,4 @@
-from utility import get_stop_words, get_prgm_lang_list, extract_pdfToText_from_file
+from utility import get_stop_words, get_prgm_lang_list, extract_pdfToText_from_file, extract_txt_from_doc
 import docx2txt
 import spacy
 import os
@@ -27,7 +27,7 @@ def get_resume_text(path):
             resume_text =  docx2txt.process(path)
         # print(resume_text)
         elif path[-3:] == 'doc':
-            pass # replace with Hidayat function
+            resume_text = extract_txt_from_doc(path)
         elif path[-3:] == 'pdf':    
             print('Its a pdf file')
             resume_text = extract_pdfToText_from_file(path)

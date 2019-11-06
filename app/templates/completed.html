@@ -7,15 +7,25 @@
         </title>
     </head>
     <body>
-        <h1>Skills</h1>
-        {% if skills | length == 0 %}
-            <h2>No Skills found</h2>
+        <h1>Results</h1>
+
+        {% if candidates | length == 0 %}
+            <h2>No Skills found for the selected candidate(s)</h2>
         {% else %}
-            <ul class="completed skillslist">
-                {% for skill in skills %}
-                <li class="skill">{{ skill }}</li>
-                {% endfor %}
-            </ul>
+            {% for candidate in candidates %}
+                <h3>Email ID : </h3> {{ candidate.email_id }}
+                {% if candidate.skills | length == 0 %}
+                    <h2>No Skills found</h2>
+                {% else %}
+                    <ul class="completed skillslist">
+                        {% for skill in candidate.skills %}
+                        <li class="skill">{{ skill }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
         {% endif %}
+        
+        
     </body>
 </html>

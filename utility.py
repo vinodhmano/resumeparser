@@ -1,7 +1,7 @@
 # General Imports
 import pandas as pd
 from nltk.corpus import stopwords
-
+import csv
 
 # to extract list of programming lanugages from wiki
 import urllib.request
@@ -116,3 +116,18 @@ def extract_txt_from_doc(filepath):
         pythoncom.CoUninitialize()
 
     return text
+
+
+def get_master_skills():
+    skills = []
+    f = None
+    try:
+        f = open('masterskills.csv',newline='')
+    except:
+        print('Exception : masterskills.cvs not found')
+    else:
+        reader = csv.reader(f)
+        for skill in reader:
+            skills.extend(skill)
+        f.close()
+    return list(set(skills))

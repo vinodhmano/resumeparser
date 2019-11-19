@@ -1,4 +1,4 @@
-from utility import get_stop_words, get_prgm_lang_list, extract_pdfToText_from_file, extract_txt_from_doc
+from utility import get_stop_words, get_prgm_lang_list, extract_pdfToText_from_file, extract_txt_from_doc, get_master_skills
 import docx2txt
 import spacy
 import os
@@ -15,7 +15,8 @@ class Candidate:
 def process_candidate(path):
     candidate = Candidate()
 
-    master_skill_list = get_prgm_lang_list()
+    #master_skill_list = get_prgm_lang_list()
+    master_skill_list = get_master_skills()
     stop_words = get_stop_words()
     resume_text = get_resume_text(path)
 
@@ -27,12 +28,15 @@ def process_candidate(path):
     candidate.skills = list(set(skills))
 
 
-    resume_text = resume_text.replace('\n','')
+    resume_text = resume_text.replace('\n',' ')
     #print(resume_text)
-    match = re.search(r'[\w\.-]+@[\w\.-]+',resume_text)
+    match = re.search(r'[\w\.-]+@[\w-]+\.[\w]{1,3}',resume_text)
+
     if not match is None:
         candidate.email_id = match.group(0)
-        print(candidate.email_id)
+        #print(candidate.email_id)
+    else:
+        candidate.email_id = 'Email ID not found'
     
     return candidate
 

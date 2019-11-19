@@ -1,63 +1,57 @@
 from app import app, api
 from flask import render_template, flash, request, url_for
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from config import Config
 from main import get_skills, Candidate, process_candidate
 import os
 
-# class Index(Resource):
-#     def get(self):
-#         return render_template("upload.html")
 
-# class Upload(Resource):
-#     def get(self):
-#         skills = []
-#         target = os.path.join(Config.APP_ROOT, 'temp')
-#         print("target folder", target)
+"""
+Rest API call
+The resource can be accessed by POST request to the url <servername:port>/get_skills
+the POST request should include the body 'application/json' = path of the resume
+curl -i -X POST -H 'Content-Type : 'application/json' -d {"resumeurl : "path to the resume"}
+"""
 
-#         if not os.path.isdir(target):
-#             os.mkdir(target)
+class Candidate(Resource):
 
-#         for file in request.files.getlist("file"):
-#             print("file name " , file)
-#             filename = file.filename
-#             destination = "\\".join([target,filename])
-#             print("destination folder ", destination)
-#             file.save(destination)
-#             skills.extend(get_skills(destination))
-#             print(skills)
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('resumeurl',type=str)
 
-#         return render_template('completed.html', skills=skills)
+    def post(self):
+        args = self.parser.parse_args()
+        print(args)
+        print(args['resumeurl'])
+        
+        candidate = process_candidate(path=args['resumeurl'])
+        return { 'email_id' : candidate.email_id,
+                 'skills' : candidate.skills
+               }
 
+api.add_resource(Candidate,'/api/v1.0/get_skills')
 
-# api.add_resource(Index,'/')
-# api.add_resource(Upload,'/upload')
-
-
-
-@app.route('/')
+@app.route('/index')
 def index():
     return render_template("upload.html")
+
 
 @app.route('/upload',methods=['GET','POST'])
 def upload():
     candidates = []
-    skills = []
+   
     target = os.path.join(Config.APP_ROOT, 'temp')
-    print("target folder", target)
+    #print("target folder", target)
 
     if not os.path.isdir(target):
         os.mkdir(target)
 
     for file in request.files.getlist("file"):
-        '''TODO : Write logic to separte the skills per file
-                  Right now. It combines all the skills into 1 list while showing
-        '''
 
-        print("file name " , file)
+        #print("file name " , file)
         filename = file.filename
         destination = "\\".join([target,filename])
-        print("destination folder ", destination)
+        # print("destination folder ", destination)
         file.save(destination)
         
         #skills.extend(get_skills(destination))
@@ -65,9 +59,11 @@ def upload():
 
         #extract email
         candidate = process_candidate(path=destination)
-        print('Canddiate Email ID : {}'.format(candidate.email_id))
-        print('Candidate skills : {}'.format(candidate.skills))
+        # print('Canddiate Email ID : {}'.format(candidate.email_id))
+        # print('Candidate skills : {}'.format(candidate.skills))
         candidates.append(candidate)
         #TODO : Write code to delete the file from the temp folder
+        os.chmod(destination,0o0777)
+        os.remove(destination)
 
-    return render_template('completed.html', skills=skills, candidates=candidates)
+    return render_template('completed.html', candidates=candidates)

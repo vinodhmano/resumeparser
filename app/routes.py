@@ -31,13 +31,18 @@ class Candidate(Resource):
 
 api.add_resource(Candidate,'/api/v1.0/get_skills')
 
+@app.route('/')
 @app.route('/index')
 def index():
-    return render_template("upload.html")
+    return render_template("index.html")
 
 
-@app.route('/upload',methods=['GET','POST'])
+@app.route('/upload')
 def upload():
+    return render_template('upload.html')
+
+@app.route('/results',methods=['GET','POST'])
+def results():
     candidates = []
    
     target = os.path.join(Config.APP_ROOT, 'temp')
@@ -66,4 +71,5 @@ def upload():
         os.chmod(destination,0o0777)
         os.remove(destination)
 
-    return render_template('completed.html', candidates=candidates)
+    
+    return render_template('results.html', candidates=candidates)

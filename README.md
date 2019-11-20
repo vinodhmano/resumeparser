@@ -7,3 +7,4 @@ Dependencies
 {bs4 : pip install bs4}
 {docx2txt : pip install docx2txt}
 {pyPDF2 : pip install pyPDF2}
+{flask : pip install flask}

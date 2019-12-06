@@ -17,3 +17,6 @@ Python >=3.6 is is installed in the machine
   i. flask_migrate
   j. flask_restful
   i. flask_wtf
+
+3. From the IDE run resumeparser.py. This will start the localhost in port 5000
+4. Open the tool with url http://127.0.0.1:5000/

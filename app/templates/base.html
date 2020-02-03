@@ -1,0 +1,23 @@
+<html>
+    <title>
+        Resume Parser - TLG Creation
+    </title>
+    <head>
+            <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+            <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500,700,900|Google+Sans+Display:400,500" rel="stylesheet" nonce="">
+    </head>
+    <body>
+        <div>
+            <a href="/index">Home</a>
+            <a href="/upload">Upload New Resume</a>
+            <hr>
+        </div>
+        <div>    
+            <h1>Resume Parser</h1> 
+            <h2>The tool to extract skills from a Resume</h2>
+        </div>
+        <div>
+            {% block content %} {% endblock %}
+        </div>
+    </body>
+</html>

@@ -36,6 +36,19 @@ h3{
     font-style: italic;
 }
 
+a:link, a:visited {
+  background-color: #3669f4de;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a:hover, a:active {
+  background-color: red;
+}
+
 .button {
   
     border: none;

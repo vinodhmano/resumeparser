@@ -121,6 +121,7 @@ def extract_txt_from_doc(filepath):
 def get_master_skills():
     skills = []
     f = None
+    print(os.path.abspath(os.curdir))
     try:
         f = open('masterskills.csv',newline='')
     except:

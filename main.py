@@ -4,7 +4,7 @@ import spacy
 import os
 import re
 
-class Candidate:
+class _Candidate:
     def __init__(self):
         self.name = ''
         self.email_id = ''
@@ -13,7 +13,7 @@ class Candidate:
         self.skills = []
 
 def process_candidate(path):
-    candidate = Candidate()
+    candidate = _Candidate()
 
     #master_skill_list = get_prgm_lang_list()
     master_skill_list = get_master_skills()
@@ -65,7 +65,7 @@ def get_resume_text(path):
         elif path[-3:] == 'doc':
             resume_text = extract_txt_from_doc(path)
         elif path[-3:] == 'pdf':    
-            print('Its a pdf file')
+            #print('Its a pdf file')
             resume_text = extract_pdfToText_from_file(path)
             #print(resume_text)
     return resume_text

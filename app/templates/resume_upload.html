@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Upload New Resume</h2>
+    <form action="{{ url_for('resume_results') }}" method="POST" enctype="multipart/form-data" novalidate>
+        {{ form.hidden_tag() }}
+        <table>
+            <tr>
+                <td>  {{ form.firstname.label }} </td>
+                <td> {{ form.firstname(size=48) }} </td>
+            </tr>
+            <tr>
+                <td>  {{ form.middlename.label }} </td>
+                <td> {{ form.middlename(size=48) }} </td>
+            </tr>
+            <tr>
+                <td>  {{ form.lastname.label }} </td>
+                <td> {{ form.lastname(size=48) }} </td>
+            </tr>
+            <tr>
+                <td>  {{ form.email_id.label }} </td>
+                <td> {{ form.email_id(size=48) }} </td>
+            </tr>
+            <tr>
+                <td>  {{ form.contact_number.label }} </td>
+                <td> {{ form.contact_number(size=48) }} </td>
+            </tr>
+            <tr>
+                <td>  {{ form.file.label }} </td>
+                <td> {{ form.file() }} </td>
+            </tr>
+        </table>
+        <p>
+            {{ form.submit() }}
+        </p>
+        
+    </form>
+
+{% endblock %}
